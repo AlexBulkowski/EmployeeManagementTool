@@ -1,0 +1,5 @@
+cmake-build-debug
+.idea
+galera_makefile
+input.bin
+Test.py
