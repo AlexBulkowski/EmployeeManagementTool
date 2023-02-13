@@ -1,6 +1,18 @@
 import mysql.connector
 import DataBase as db
 
+#print out all employees from the database in the readable form -> function made to be called inside other functions
+def display_employees():
+    connection = db.get_connection_to_database()
+    SelectSQL = "SELECT first_name, last_name, email, hire_date, salary FROM employees"
+    cursor = connection.cursor()
+    cursor.execute(SelectSQL)
+    id = 1
+    for(first_name, last_name, email, hire_date, salary) in cursor:
+        print(f"Employee #{id}:\nName: {first_name.title()} {last_name.title()}\nE-mail: {email}\nEmployed since:{hire_date}\nEarns: {salary} per month")
+        id += 1
+    connection.close()
+
 # Every employee has: employee_id, first_name, last_name, email, hire_date, salary
 def add_employee():
     print("Creating a new employee")
