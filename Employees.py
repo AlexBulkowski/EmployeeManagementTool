@@ -13,25 +13,32 @@ def display_employees():
         id += 1
     connection.close()
 
-# Every employee has: employee_id, first_name, last_name, email, hire_date, salary
+# Every employee has: employee_id, first_name, last_name, email,job_id,department_id, hire_date, salary
+# Status (Active/Vacation/Sick_leave/Fired/Retired/Maternity_leave)
 def add_employee():
     print("Creating a new employee")
     emp_first_name = str(input("Enter first name: ")).title()
     emp_last_name = str(input("Enter last name: ")).title()
     emp_email = f"{emp_first_name[0].lower()}.{emp_last_name.lower()}@company.com"
+    #emp_job_id TO DO
+    #emp_department_id -> depends on job_id
     emp_hire_date = str(input("Enter hire date in format yyyy-mmm-dd: "))
     emp_salary = int(input("Enter salary: "))
 
     connection = db.get_connection_to_database()
     cursor = connection.cursor()
-    InsertSQL = "INSERT INTO employees(FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, SALARY) " \
-                "VALUES(%(first_name)s, %(last_name)s, %(email)s, %(hire_date)s, %(salary)s)"
+    InsertSQL = "INSERT INTO employees(FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, SALARY, STATUS) " \
+                "VALUES(%(first_name)s, %(last_name)s, %(email)s, %(hire_date)s, %(salary)s, %(status)s)"
     InsertData={
         'first_name': emp_first_name,
         'last_name': emp_last_name,
         'email': emp_email,
+        'job_id': emp_job_id,
+        'department_id': emp_department_id,
         'hire_date': emp_hire_date,
-        'salary': emp_salary}
+        'salary': emp_salary,
+        'status':'Active'
+    }
 
     cursor.execute(InsertSQL, InsertData)
     connection.commit()
