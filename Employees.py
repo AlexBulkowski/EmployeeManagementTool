@@ -14,7 +14,6 @@ def display_employees():
     connection.close()
 
 # Every employee has: employee_id, first_name, last_name, email,job_id,department_id, hire_date, salary
-# Status (Active/Vacation/Sick_leave/Fired/Retired/Maternity_leave)
 def add_employee():
     print("Creating a new employee")
     emp_first_name = str(input("Enter first name: ")).title()
@@ -27,8 +26,8 @@ def add_employee():
 
     connection = db.get_connection_to_database()
     cursor = connection.cursor()
-    InsertSQL = "INSERT INTO employees(FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, SALARY, STATUS) " \
-                "VALUES(%(first_name)s, %(last_name)s, %(email)s, %(hire_date)s, %(salary)s, %(status)s)"
+    InsertSQL = "INSERT INTO employees(FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, SALARY) " \
+                "VALUES(%(first_name)s, %(last_name)s, %(email)s, %(hire_date)s, %(salary)s"
     DataQuery={
         'first_name': emp_first_name,
         'last_name': emp_last_name,
@@ -36,8 +35,7 @@ def add_employee():
         'job_id': emp_job_id,
         'department_id': emp_department_id,
         'hire_date': emp_hire_date,
-        'salary': emp_salary,
-        'status':'Active'
+        'salary': emp_salary
     }
 
     cursor.execute(InsertSQL, DataQuery)
@@ -49,7 +47,7 @@ def add_employee():
 
 # Editing every variable employees have
 def edit_employee():
-    print("Edit Employee's profile")
+    print("=== Edit Employee's profile ===")
     print()
     display_employees()
     print()
@@ -81,7 +79,7 @@ def edit_employee():
     except:
         print("Something went worng!")
         print("Try again")
-        
+
 
     user_choice3 = input("Enter the value you want to change to: ")
     connection = db.get_connection_to_database()
@@ -95,5 +93,5 @@ def edit_employee():
     cursor.execute(UpdateSQL, DataQuery)
     connection.commit()
     connection.close()
-    print(f"You have succesfully edited employee's number: {user_choice} profile!")
+    print(f"You have successfully edited employee's number: {user_choice} profile!")
 
