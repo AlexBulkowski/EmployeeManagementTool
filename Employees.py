@@ -95,3 +95,36 @@ def edit_employee():
     connection.close()
     print(f"You have successfully edited employee's number: {user_choice} profile!")
 
+def remove_employee():
+    print("=== Remove Employee's profile ===")
+    print()
+    display_employees()
+    print("Remove Employee's profile")
+    user_choice_id = int(input("Enter employee's ID: "))
+    print()
+    print("What is the reason for removing an employee?")
+    print("1 - Fired by company")
+    print("2 - Dismissal by employee")
+    print("3 - Retirement")
+    print("4 - Other")
+    user_choice_reason = int(input("Enter number 1-4: "))
+    try:
+        if user_choice_reason not in range(1,5):
+            print("You can only put a number between 1 and 4")
+            print("Try again!")
+        elif user_choice_reason == 1:
+            user_choice_reason = "Fired by company"
+        elif user_choice_reason == 2:
+            user_choice_reason = "Dismissal by employee"
+        elif user_choice_reason == 3:
+            user_choice_reason = "Retirement"
+        elif user_choice_reason == 4:
+            user_choice_reason = "Other"
+    except:
+        print("Something went worng!")
+        print("Try again")
+    connection = db.get_connection_to_database()
+    cursor = connection.cursor()
+
+    SelectSQL = f"SELECT * FROM employees WHERE EMPLOYEE_id = {user_choice_id} "
+    InsertSQL = "INSERT INTO past_employees VALUES("
