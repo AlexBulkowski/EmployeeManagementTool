@@ -80,7 +80,7 @@ def edit_employee():
         print("Something went worng!")
         print("Try again")
 
-
+# Need to add how to show old value
     user_choice3 = input("Enter the value you want to change to: ")
     connection = db.get_connection_to_database()
     cursor = connection.cursor()
@@ -120,11 +120,33 @@ def remove_employee():
             user_choice_reason = "Retirement"
         elif user_choice_reason == 4:
             user_choice_reason = "Other"
+        else:
+            user_choice_reason = "Other"
     except:
         print("Something went worng!")
         print("Try again")
+    departure_date = input("Enter departure date in format yyyy-mmm-dd: ")
+
     connection = db.get_connection_to_database()
     cursor = connection.cursor()
 
-    SelectSQL = f"SELECT * FROM employees WHERE EMPLOYEE_id = {user_choice_id} "
-    InsertSQL = "INSERT INTO past_employees VALUES("
+    SelectSQL = f"SELECT employee_id, first_name, last_name, department_id, hire_date  FROM employees WHERE EMPLOYEE_id = {str(user_choice_id)}"
+    cursor.execute(SelectSQL)
+    for(employee_id, first_name, last_name, department_id, hire_date) in cursor:
+        emp_data={
+            "employee_id": employee_id,
+            "first_name": first_name,
+            "last_name": last_name,
+            "department_id": department_id,
+            "hire_date": hire_date,
+        }
+    emp_data["departure_date"] = departure_date
+    emp_data["reason_for_departure"] = user_choice_reason
+
+    InsertSQL = "INSERT INTO past_employees(EMPLOYEE_ID,FIRST_NAME, LAST_NAME, DEPARTMENT_ID, HIRE_DATE, DEPARTURE_DATE, REASON_FOR_DEPARTURE) " \
+                "VALUES(%(employee_id)s,%(first_name)s, %(last_name)s, %(department_id)s, %(hire_date)s, %(departure_date)s, %(reason_for_departure)s)"
+    cursor.execute(InsertSQL, emp_data)
+    connection.commit()
+    connection.close()
+
+    print(f"You have successfully removed employee's number: {user_choice_id} profile!" )
