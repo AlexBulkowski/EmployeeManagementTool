@@ -80,10 +80,17 @@ def edit_employee():
         print("Something went worng!")
         print("Try again")
 
-# Need to add how to show old value
-    user_choice3 = input("Enter the value you want to change to: ")
     connection = db.get_connection_to_database()
     cursor = connection.cursor()
+
+    SelectSQL = f'SELECT {user_choice2} FROM employees WHERE employee_id= %(user_choice)s'
+
+    cursor.execute(SelectSQL)
+    for data in cursor:
+        data = data[0]
+
+    print(f"The current value you want to change is: {data}")
+    user_choice3 = input("Enter the value you want to change to: ")
 
     UpdateSQL = f"UPDATE employees SET {user_choice2} = %(user_choice3)s WHERE employee_id= %(user_choice)s"
     DataQuery={
@@ -145,7 +152,11 @@ def remove_employee():
 
     InsertSQL = "INSERT INTO past_employees(EMPLOYEE_ID,FIRST_NAME, LAST_NAME, DEPARTMENT_ID, HIRE_DATE, DEPARTURE_DATE, REASON_FOR_DEPARTURE) " \
                 "VALUES(%(employee_id)s,%(first_name)s, %(last_name)s, %(department_id)s, %(hire_date)s, %(departure_date)s, %(reason_for_departure)s)"
+    DeleteSQL = f"DELETE FROM employees WHERE EMPLOYEE_ID = {str(user_choice_id)}"
+
     cursor.execute(InsertSQL, emp_data)
+    connection.commit()
+    cursor.execute(DeleteSQL)
     connection.commit()
     connection.close()
 
